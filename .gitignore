@@ -1,0 +1,22 @@
+# --- Python / Django / SQLAlchemy ---
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.sqlite3
+.env
+
+# --- Frontend (React / Next.js / Vue) ---
+node_modules/
+.next/
+dist/
+build/
+.env.local
+.env.development.local
+.env.production.local
+
+# --- IDEs and OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
