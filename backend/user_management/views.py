@@ -26,7 +26,9 @@ class LoginAPIView(APIView):
             credentials = UserLoginSchema.model_validate(request.data)
 
             with get_db() as db:
+                print("CC", credentials)
                 user = db.query(User).filter(User.email == credentials.email).first()
+                print("UU", user)
                 if not user or not verify_password(credentials.password, user.hashed_password):
                     return Response({"detail": "Invalid credentials"}, status=HTTP_401_UNAUTHORIZED)
 
@@ -39,6 +41,7 @@ class LoginAPIView(APIView):
                 }, status=200)
         
         except Exception as e:
+            print("EEEE", e)
             return Response(
                 {"error": "Error while login"}, status=HTTP_500_INTERNAL_SERVER_ERROR
             )
