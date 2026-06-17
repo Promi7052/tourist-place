@@ -5,6 +5,7 @@ import { isAxiosError } from 'axios';
 import { Container, Table, Button, Spinner, Alert } from 'react-bootstrap';
 import { deletePlace, getPlace, getPlaces } from '../api';
 import { PlaceResponse } from '../interfaces';
+import { toTitleCase, firstCharCap, allCap } from '../utils/common';
 
 const PlacesList = () => {
   const [places, setPlaces] = useState<PlaceResponse[]>([]);
@@ -79,11 +80,11 @@ const PlacesList = () => {
   }
 
   return (
-    <Container className="py-5">
+    <Container className="my-4">
       {/* Upper Action Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold text-dark m-0">Explore Tourist Places</h2>
-        <Button variant="primary" className="fw-bold px-4 shadow-sm" onClick={() => navigate('/places/create')}>
+        <Button variant="info" role='button' className="fw-bold px-4 shadow-sm" onClick={() => navigate('/places/create')}>
           + Add New Place
         </Button>
       </div>
@@ -106,19 +107,15 @@ const PlacesList = () => {
           </thead>
           <tbody>
             {places.map((place: PlaceResponse) => {
-              const hasImage = place.image_paths && place.image_paths.length > 0;
-              const imageUrl = hasImage 
-                ? `${BACKEND_URL}${place.image_paths[0]}` 
-                : 'https://via.placeholder.com/70x50?text=No+Img';
 
               return (
                 <tr key={place.id}>
                   
-                  <td className="fw-bold text-secondary">{place.name}</td>
+                  <td className="fw-bold text-dark">{toTitleCase(place.name)}</td>
                   
-                  <td>{place.location}</td>
+                  <td>{firstCharCap(place.location)}</td>
                   
-                  <td>{place.country}</td>
+                  <td>{allCap(place.country)}</td>
                   
                   {/* Updated Multi-Image Column */}
                   <td>
@@ -128,7 +125,7 @@ const PlacesList = () => {
                         place.image_paths.map((path: string, index: number) => (
                           <img 
                             key={index}
-                            src={new URL(`../assets/places_pic/${path}`, import.meta.url).href} 
+                            src={new URL(`${path}`, import.meta.url).href} 
                             alt={`${place.name} thumbnail ${index + 1}`} 
                             className="place-table-thumb"
                           />
@@ -147,7 +144,7 @@ const PlacesList = () => {
                   <td>
                     <div className="d-flex gap-2 justify-content-center">
                       <Button 
-                        variant="success" 
+                        variant="dark" 
                         size="sm" 
                         className="fw-bold px-3"
                         onClick={() => handleUpdate(place.id)}
@@ -155,7 +152,7 @@ const PlacesList = () => {
                         Edit
                       </Button>
                       <Button 
-                        variant="danger" 
+                        variant="danger"
                         size="sm" 
                         className="fw-bold"
                         onClick={() => handleDelete(place.id)}

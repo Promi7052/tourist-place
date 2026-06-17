@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Login from '../login';
@@ -81,5 +81,67 @@ describe('Login', () => {
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Invalid credentials');
     expect(mockNavigate).not.toHaveBeenCalled();
+  });
+});
+
+describe('Login Card - Attribute & Visual Unit Tests', () => {
+  
+  test('verifies email input field attributes and centering', () => {
+    renderWithRouter(<Login />);
+    
+    // 1. Verify the label text exists
+    const emailLabel = screen.getByText(/Email Address/i);
+    expect(emailLabel).toBeInTheDocument();
+    
+    // Check for Bootstrap centering alignment class visible in the image
+    expect(emailLabel).toHaveClass('text-start');
+
+    // 2. Verify the input field has correct type and placeholder
+    const emailInput = screen.getByPlaceholderText('name@example.com');
+    expect(emailInput).toBeInTheDocument();
+    expect(emailInput).toHaveAttribute('type', 'email');
+  });
+
+  test('verifies password input field attributes and security type', async () => {
+    renderWithRouter(<Login />);
+    
+    const passwordLabel = await screen.findByText(/Password/i);
+    expect(passwordLabel).toBeInTheDocument();
+    expect(passwordLabel).toHaveClass('text-start');
+
+    // Crucial for security: ensure type is "password" so characters are hidden
+    const passwordInput = screen.getByPlaceholderText('Enter password');
+    expect(passwordInput).toBeInTheDocument();
+    expect(passwordInput).toHaveAttribute('type', 'password');
+  });
+
+  test('verifies Sign In button styles and type', () => {
+    renderWithRouter(<Login />);
+    
+    const signInButton = screen.getByRole('button', { name: /Sign In/i });
+    expect(signInButton).toBeInTheDocument();
+    
+    // Verify it functions as a form submit button
+    expect(signInButton).toHaveAttribute('type', 'submit');
+
+    // Check for the vibrant blue color branding seen in the screenshot
+    expect(signInButton).toHaveClass('btn-primary');
+  });
+
+  test('verifies footer signup alignment and text attributes', async () => {
+    renderWithRouter(<Login />);
+    
+    // Check for the footer wrapper text
+    const footerText = await screen.findByText(/Don't have an account\?/i);
+    
+    expect(footerText).toBeInTheDocument();
+    
+    // The image shows the footer text centered at the bottom of the card
+    expect(footerText).toHaveClass('text-center');
+    expect(footerText).toHaveClass('text-muted');
+
+    // Check that 'Sign Up' acts as a navigation link or anchor tag
+    const signUpLink = await screen.findByRole('link', { name: /Sign Up/i });
+    expect(signUpLink).toBeInTheDocument();
   });
 });

@@ -84,4 +84,23 @@ describe('Signup', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Email already registered');
     expect(mockNavigate).not.toHaveBeenCalled();
   });
+
+  it('renders the signup form with correct visuals and attributes', () => {
+    renderWithRouter(<Signup />);
+
+    // 1. Attribute Testing (Verify form inputs are configured correctly)
+    const nameInput = screen.getByLabelText(/full name/i);
+    const emailInput = screen.getByLabelText(/email address/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+
+    expect(nameInput).toHaveAttribute('type', 'text');
+    expect(emailInput).toHaveAttribute('type', 'email');
+    expect(passwordInput).toHaveAttribute('type', 'password');
+    expect(passwordInput).toHaveAttribute('placeholder', 'Create strong password');
+
+    // 2. Visual/Styling Testing
+    // Verify button styling (assuming Bootstrap classes)
+    const registerButton = screen.getByRole('button', { name: /register/i });
+    expect(registerButton).toHaveClass('btn', 'btn-success'); // Replace 'btn-success' with your actual class
+  });
 });

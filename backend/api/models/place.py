@@ -20,7 +20,7 @@ class Place(Base):
     image_paths: Mapped[list[str]] = mapped_column(ARRAY(String), default=list)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
-    created_by_id: Mapped[int] = mapped_column(ForeignKey("users.id"), unique=True, nullable=False)
+    created_by_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
 
     created_by: Mapped["User"] = relationship("User")
 

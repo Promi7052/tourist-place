@@ -4,25 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Card, Form, Button, Row, Col, Alert, Spinner } from 'react-bootstrap';
 import { isAxiosError } from 'axios';
 import { createPlace } from '../api';
+import { ImageUploadField } from './third_party_components/ImageUpload';
 
 const CreatePlace = () => {
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
   const [country, setCountry] = useState('');
   const [description, setDescription] = useState('');
-  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Handle multi-image selection
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const fileNames = Array.from(e.target.files).map((file) => file.name);
-      setSelectedFileNames(fileNames);
-    }
-  };
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +30,7 @@ const CreatePlace = () => {
         location,
         country,
         description: description || null,
-        image_paths: selectedFileNames,
+        image_paths: uploadedImages,
       });
 
       alert('Tourist place created successfully!');
@@ -52,7 +47,7 @@ const CreatePlace = () => {
 
   return (
     <Container className="py-4 d-flex justify-content-center">
-      <Card className="shadow-sm border-0 p-2 w-100" style={{ maxWidth: '700px' }}>
+      <Card className={"card-bg-color shadow-sm border-0 p-2 w-100"} style={{ maxWidth: '700px' }}>
         <Card.Body>
           <h3 className="fw-bold text-dark mb-4">Add New Tourist Place</h3>
 
@@ -61,7 +56,7 @@ const CreatePlace = () => {
           <Form onSubmit={handleSubmit}>
             {/* Row 1: Name Field */}
             <Form.Group className="mb-3" controlId="placeName">
-              <Form.Label className="small fw-bold text-secondary">Place Name</Form.Label>
+              <Form.Label className="small fw-bold text-dark w-100 text-start">Place Name</Form.Label>
               <Form.Control 
                 type="text" 
                 placeholder="e.g., Grand Canyon" 
@@ -75,7 +70,7 @@ const CreatePlace = () => {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3" controlId="placeLocation">
-                  <Form.Label className="small fw-bold text-secondary">Location / State</Form.Label>
+                  <Form.Label className="small fw-bold text-dark w-100 text-start">Location / State</Form.Label>
                   <Form.Control 
                     type="text" 
                     placeholder="e.g., Arizona" 
@@ -87,7 +82,7 @@ const CreatePlace = () => {
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3" controlId="placeCountry">
-                  <Form.Label className="small fw-bold text-secondary">Country</Form.Label>
+                  <Form.Label className="small fw-bold text-dark w-100 text-start">Country</Form.Label>
                   <Form.Control 
                     type="text" 
                     placeholder="e.g., United States" 
@@ -101,7 +96,7 @@ const CreatePlace = () => {
 
             {/* Row 3: Description Textarea */}
             <Form.Group className="mb-3" controlId="placeDescription">
-              <Form.Label className="small fw-bold text-secondary">Description</Form.Label>
+              <Form.Label className="small fw-bold text-dark w-100 text-start">Description</Form.Label>
               <Form.Control 
                 as="textarea" 
                 rows={4} 
@@ -113,24 +108,16 @@ const CreatePlace = () => {
 
             {/* Row 4: Multi-File Upload Control */}
             <Form.Group className="mb-4" controlId="placeImages">
-              <Form.Label className="small fw-bold text-secondary">Upload Images (Multiple Allowed)</Form.Label>
-              <Form.Control 
-                type="file" 
-                multiple // ✅ Allows users to select more than one image file at once
-                accept="image/*" // Restricts selections strictly to images (.png, .jpg, etc.)
-                onChange={handleFileChange}
+              <ImageUploadField 
+                urls={uploadedImages} 
+                onChange={(url: string[]) => setUploadedImages(url)} 
               />
-              {selectedFileNames.length > 0 && (
-                <Form.Text className="text-success fw-bold d-block mt-1">
-                  {selectedFileNames.length} file(s) selected: {selectedFileNames.join(', ')}
-                </Form.Text>
-              )}
             </Form.Group>
 
             {/* Form Actions Footer Buttons */}
             <div className="d-flex gap-3 justify-content-end border-top pt-3">
               <Button 
-                variant="outline-secondary" 
+                variant="outline-dark" 
                 type="button" 
                 className="px-4 fw-bold"
                 onClick={() => navigate('/places')}
@@ -139,7 +126,7 @@ const CreatePlace = () => {
                 Cancel
               </Button>
               <Button 
-                variant="primary" 
+                variant="info" 
                 type="submit" 
                 className="px-4 fw-bold"
                 disabled={loading}

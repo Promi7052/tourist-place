@@ -15,6 +15,8 @@
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
+  --bg-color-light-ash: #b6b6b6;
+
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: light dark;
@@ -57,7 +59,7 @@ body {
 }
 
 #root {
-  width: 1126px;
+  /* width: 1126px; */
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -112,6 +114,14 @@ code {
   background: var(--code-bg);
 }
 
+
+.card-bg-color {
+  background-color: var(--bg-color-light-ash) !important;
+}
+
+.header-bg-color {
+  background-color: var(--bg-color-light-ash) !important;
+}
 
 .place-card-img-wrapper {
   width: 100%;

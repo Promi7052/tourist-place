@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import PlacesList from '../PlaceList';
@@ -135,3 +135,47 @@ describe('PlacesList', () => {
     });
   });
 });
+
+describe('TouristPortal Dashboard - Text and Elements', () => {
+  test('renders the navigation brand and main heading', async () => {
+    renderWithRouter(<PlacesList />);
+
+    // Check for the main section heading
+    const mainHeading = await screen.findByRole('heading', { name: /explore tourist places/i });
+    expect(mainHeading).toBeInTheDocument();
+  });
+
+  test('renders the table headers correctly', async () => {
+    renderWithRouter(<PlacesList />);
+    
+    const header_1 = await screen.findByText('Place Name');
+    expect(header_1).toBeInTheDocument()
+    expect(screen.getByText('Location')).toBeInTheDocument();
+    expect(screen.getByText('Actions')).toBeInTheDocument();
+  });
+});
+
+describe('TouristPortal Dashboard - Component Styles', () => {
+    test('verifies "+ Add New Place" button presence and style', async () => {
+      renderWithRouter(<PlacesList />);
+      
+      const addButton = await screen.findByRole('button', { name: /\+ add new place/i });
+      expect(addButton).toBeInTheDocument();
+  
+      // Example 1: Testing exact inline or computed styles
+      expect(addButton).toHaveClass('btn-info');
+    });
+  
+    test('verifies "Delete" button has danger styling', async () => {
+      renderWithRouter(<PlacesList />);
+
+      const row = await screen.findByRole('row', { name: /eiffel tower/i });
+
+      // 2. Look for the button ONLY within that row
+      // This uses 'within(row)' to narrow the search scope
+      const deleteButton = within(row).getByRole('button', { name: /delete/i });
+
+      // 3. Verify the styling
+      expect(deleteButton).toHaveClass('btn-danger');
+    });
+  });

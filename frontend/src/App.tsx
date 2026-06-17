@@ -1,7 +1,4 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import './../scss/custom.scss';
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
@@ -11,6 +8,7 @@ import Login from './components/login'
 import Signup from './components/signup'
 import DashboardLayout from './components/DashboardLayout'
 import CreatePlace from './components/CreatePlace'
+import {Cloudinary} from "@cloudinary/url-gen";
 
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -19,6 +17,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
+
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: 'tourist_place'
+    }
+  });
 
   return (
     <Router>

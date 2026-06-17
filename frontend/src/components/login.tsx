@@ -40,7 +40,7 @@ const Login = () => {
 
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="loginEmail">
-              <Form.Label className="small fw-bold text-secondary">Email Address</Form.Label>
+              <Form.Label className="small fw-bold text-dark w-100 text-start">Email Address</Form.Label>
               <Form.Control 
                 type="email" 
                 placeholder="name@example.com"
@@ -51,7 +51,7 @@ const Login = () => {
             </Form.Group>
 
             <Form.Group className="mb-4" controlId="loginPassword">
-              <Form.Label className="small fw-bold text-secondary">Password</Form.Label>
+              <Form.Label className="small fw-bold text-dark w-100 text-start">Password</Form.Label>
               <Form.Control 
                 type="password" 
                 placeholder="Enter password"
@@ -66,8 +66,8 @@ const Login = () => {
             </Button>
           </Form>
 
-          <div className="text-center small mt-3">
-            <span className="text-muted">Don't have an account? </span>
+          <div className="small mt-3">
+            <span className="text-muted text-center">Don't have an account? </span>
             <Link to="/signup" className="text-primary fw-bold text-decoration-none">Sign Up</Link>
           </div>
         </Card.Body>

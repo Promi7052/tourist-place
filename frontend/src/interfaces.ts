@@ -43,3 +43,10 @@ export interface PlaceImage {
     created_at: string; // Python datetime converts to an ISO string
     image_paths: string[]; 
   }
+
+  export interface CloudinaryResult {
+    event: string;
+    info: {
+      secure_url: string;
+    };
+  }

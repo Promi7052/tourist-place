@@ -4,6 +4,7 @@ import { isAxiosError } from 'axios';
 import { Container, Form, Button, Spinner, Alert } from 'react-bootstrap';
 import { getPlace, updatePlace } from '../api';
 import { PlaceResponse } from '../interfaces';
+import { ImageUploadField } from './third_party_components/ImageUpload';
 
 const EditPlace = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +20,7 @@ const EditPlace = () => {
     location: placeFromState?.location ?? '',
     country: placeFromState?.country ?? '',
     description: placeFromState?.description ?? '',
+    image_urls: placeFromState?.image_paths ?? []
   });
 
   useEffect(() => {
@@ -33,6 +35,7 @@ const EditPlace = () => {
           location: place.location,
           country: place.country,
           description: place.description ?? '',
+          image_urls: place.image_paths ?? []
         });
         setLoading(false);
       } catch (err: unknown) {
@@ -60,6 +63,7 @@ const EditPlace = () => {
         location: form.location,
         country: form.country,
         description: form.description || null,
+        image_paths: form.image_urls || []
       });
       alert('Place updated successfully!');
       navigate('/places');
@@ -88,7 +92,7 @@ const EditPlace = () => {
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Name</Form.Label>
+          <Form.Label className="small fw-bold text-dark w-100 text-start">Name</Form.Label>
           <Form.Control
             required
             value={form.name}
@@ -97,7 +101,7 @@ const EditPlace = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Location</Form.Label>
+          <Form.Label className="small fw-bold text-dark w-100 text-start">Location</Form.Label>
           <Form.Control
             required
             value={form.location}
@@ -106,7 +110,7 @@ const EditPlace = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Country</Form.Label>
+          <Form.Label className="small fw-bold text-dark w-100 text-start">Country</Form.Label>
           <Form.Control
             required
             value={form.country}
@@ -115,7 +119,7 @@ const EditPlace = () => {
         </Form.Group>
 
         <Form.Group className="mb-4">
-          <Form.Label>Description</Form.Label>
+          <Form.Label className="small fw-bold text-dark w-100 text-start">Description</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
@@ -124,11 +128,22 @@ const EditPlace = () => {
           />
         </Form.Group>
 
+        <Form.Group className="mb-4" controlId="placeImages">
+          <ImageUploadField 
+            urls={form.image_urls} 
+            onChange={(urls: string[]) => setForm((prevForm) => ({
+              ...prevForm,
+              image_urls: urls
+            }))} 
+          />
+        </Form.Group>
+
+
         <div className="d-flex gap-2">
-          <Button variant="primary" type="submit" disabled={saving}>
+          <Button variant="info" type="submit" disabled={saving}>
             {saving ? 'Saving...' : 'Save Changes'}
           </Button>
-          <Button variant="outline-secondary" onClick={() => navigate('/places')}>
+          <Button role='button' variant="outline-dark" onClick={() => navigate('/places')}>
             Cancel
           </Button>
         </div>
